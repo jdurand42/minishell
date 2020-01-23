@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 13:37:25 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/23 17:52:32 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/23 18:16:35 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,23 @@ void 	parse_stdin(t_data *data)
 **
 **
 */
+
+void 	skip_spaces(char *cmds, int *i)
+{
+	while (cmds[*i] != 0 && cmds[*i] == 32)
+		*i += 1;
+}
+
+void 	exec_cmd(t_data *data, int *id)
+{
+	int i;
+
+	i = 0;
+	skip_spaces(data->cmds[*id], &i);
+	//if (ft_strncmp(data->cmds[*id], "echo ", 5) == 0)
+	ft_printf("%s\n", data->cmds[*id]);
+	*id += 1;
+}
 
 void 	parse_sep(t_data *data)
 {

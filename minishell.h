@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:59:42 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/23 17:39:03 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/23 18:11:26 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,3 +41,4 @@ int 	is_sep(char c);
 void 	init_data(t_data *data);
 void 	parse_a_cmd(t_data *data);
 void 	parse_stdin(t_data *data);
+void 	exec_cmd(t_data *data, int *id);

@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:58:29 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/23 17:59:28 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/23 18:17:05 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,21 @@ int main()
 {
 	t_data	data;
 	char	*cmd;
+	int 	code;
 
 	data.gb_collector = NULL;
+
 	init_data(&data);
 	while (1)
 	{
+		code = 0;
 		ft_printf("%s :", PROMPT);
 		parse_stdin(&data); // re_rum if "" not closed
-	//	ft_printf("%s\n", data.entry);
 		if (data.entry != 0 && ft_strncmp(data.entry, "exit\n", 5) == 0)
 			safe_exit(&data);
-		//if (!data.entry)
-		//	continue ;
 		parse_a_cmd(&data);
-		//print_cmds(&data);
+		while (code <= data.n_cmds)
+			exec_cmd(&data, &code);
 		init_data(&data);
 
 	}
