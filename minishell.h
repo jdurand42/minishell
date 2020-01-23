@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:59:42 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/22 19:49:54 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/23 17:14:51 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,29 @@
 //#include <fctnl.h>
 #include <unistd.h>
 #include "libft/libft.h"
-
+#define PROMPT "Minishell jdurand: "
+/*
+typedef struct	s_cmd
+{
+	char 	*name;
+	char 	**args;
+	int 	n_args;
+}				t_cmd;
+*/
 typedef struct	s_data
 {
-	struct s_list *gb_collector;
+	struct  s_list	*gb_collector;
+	char 			**cmds;
+	char			*entry;
+	char			*sep
+	int 			n_cmds;
+	int				i;
 }				t_data;
 
 void	*safe_malloc(size_t n, size_t n_size, t_data *data);
 void 	safe_exit(t_data *data);
+char 	*ft_strdup_skip(t_data *data, char *s);
+int 	is_sep(char c);
+void 	init_data(t_data *data);
+void 	parse_a_cmd(t_data *data);
+void 	parse_stdin(t_data *data);
