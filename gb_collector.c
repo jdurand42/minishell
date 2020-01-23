@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 19:02:58 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/23 12:41:32 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/23 17:59:38 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,15 @@ void 	safe_exit(t_data *data)
 	if (!data->gb_collector)
 		return ;
 	t_list *b_next;
-	ft_lstclear(&data->gb_collector, free);
-	/*
+//	ft_lstclear(&data->gb_collector, free);
+
 	while (data->gb_collector != NULL)
 	{
 		b_next = data->gb_collector->next;
 		free(data->gb_collector->content);
 		free(data->gb_collector);
 		data->gb_collector = b_next;
-	}*/
-//	while(1);
+	}
+	while(1);
 	exit(0);
 }

@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 14:41:22 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/23 16:46:19 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/23 17:42:09 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void 	init_data(t_data *data)
 {
 	data->n_cmds = 0;
 	data->i = 0;
+	data->cmds = NULL;
+	data->sep = NULL;
 }
 
 int		is_sep(char c)

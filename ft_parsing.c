@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 13:37:25 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/23 17:18:43 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/23 17:52:32 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void 	parse_stdin(t_data *data)
 		if (ft_check_nl(data->entry))
 			break ;
 	}
-	if (file)
-		ft_lstadd_front(&data->gb_collector, ft_lstnew(file));
+	if (data->entry)
+		ft_lstadd_front(&data->gb_collector, ft_lstnew(data->entry));
 //	printf("%s\n", data->entry);
 }
 /*
@@ -66,9 +66,15 @@ void 	parse_sep(t_data *data)
 	while (data->entry[i] != 0)
 	{
 		if (is_sep(data->entry[i]))
-			data->sep[j] = data->entry[j];
-		j++;
+		{
+			data->sep[j] = data->entry[i];
+			printf("%c\n", data->sep[j]);
+			j++;
+		}
+		i++;
 	}
+	printf("ici %d\n", j);
+	data->sep[j] = 0;
 }
 
 void 	parse_a_cmd(t_data *data)
@@ -96,4 +102,5 @@ void 	parse_a_cmd(t_data *data)
 	}
 	for (int i = 0; data->cmds[i] != 0; i++)
 		printf("%d: %s\n", 	i, data->cmds[i]);
+	printf("seps: %s\n", data->sep);
 }

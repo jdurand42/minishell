@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:59:42 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/23 17:14:51 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/23 17:39:03 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct	s_data
 	struct  s_list	*gb_collector;
 	char 			**cmds;
 	char			*entry;
-	char			*sep
+	char			*sep;
 	int 			n_cmds;
 	int				i;
 }				t_data;
