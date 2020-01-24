@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:59:42 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/24 10:19:13 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/24 10:56:29 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ typedef struct	s_cmd
 typedef struct	s_data
 {
 	struct  s_list	*gb_collector;
-	char 			**cmds;
+	struct	s_list	**lst;
+ 	char			**cmds;
 	char 			**args;
 	char			*entry;
 	char			*sep;
@@ -44,6 +45,6 @@ void 	init_data(t_data *data);
 void 	parse_a_cmd(t_data *data);
 void 	parse_stdin(t_data *data);
 void 	parse_sep(t_data *data);
-void 	exec_cmd(t_data *data, int *id);
-void 	ft_echo(t_data *data, char *cmd, int i);
+void 	exec_cmd(t_data *data, t_list *args);
+void 	ft_echo(t_data *data, t_list *lst);
 void 	skip_spaces(char *s, int *i);

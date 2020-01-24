@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:58:29 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/24 10:03:36 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/24 11:09:44 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ int main()
 			safe_exit(&data);
 		parse_a_cmd(&data);
 		printf("%d\n", data.n_cmds);
-		while (data.entry && code <= data.n_cmds)
+		while (data.entry && code <= data.n_cmds && data.lst != NULL)
 		{
-			printf("lopp inf\n");
-			exec_cmd(&data, &code);
+			exec_cmd(&data, data.lst[code]);
+			code += 1;
 		}
 		init_data(&data);
 

@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 13:37:25 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/24 10:20:19 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/24 11:12:09 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,20 +67,13 @@ void 	skip_spaces(char *s, int *i)
 	}
 }
 
-void 	exec_cmd(t_data *data, int *id)
+void 	exec_cmd(t_data *data, t_list *args)
 {
-	int i;
-
-	i = 0;
-	printf("id: %d, %s\n", *id, data->cmds[*id]);
-	skip_spaces(data->cmds[*id], &i);
-	if (data->cmds[*id] != NULL && ft_strncmp(&data->cmds[*id][i], "echo", 4) == 0 &&
-		!ft_isalpha(data->cmds[*id][i + 4]))
-		ft_echo(data, data->cmds[*id], i + 4);
-//	ft_printf("%s\n", data->cmds[*id]);
-	*id += 1;
+	if (!(args != NULL))
+		return ;
+	if (ft_strncmp(args->content, "echo", 4) == 0)
+		ft_echo(data, args);
 }
-
 void 	parse_sep(t_data *data)
 {
 	int i;
@@ -117,11 +110,13 @@ void 	parse_a_cmd(t_data *data)
 	}
 	parse_sep(data);
 	j = 0;
+	printf("%d\n", data->n_cmds);
 	data->cmds = ft_split_set(data->entry, "|;&\n");
-	data->args = safe_malloc(data->n_cmds, sizeof(char*), data);
+	data->lst = safe_malloc(data->n_cmds + 1, sizeof(t_list*), data);
 	ft_lstadd_front(&data->gb_collector, ft_lstnew(data->cmds));
 	while (data->cmds[j] != 0)
 	{
+		data->lst[j] = ft_splitlst(data->cmds[j], " ");
 		ft_lstadd_front(&data->gb_collector, ft_lstnew(data->cmds[j]));
 		j++;
 	}
