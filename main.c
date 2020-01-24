@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:58:29 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/23 18:17:05 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/24 10:03:36 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,17 @@ int main()
 	while (1)
 	{
 		code = 0;
-		ft_printf("%s :", PROMPT);
+		ft_printf("%s", PROMPT);
 		parse_stdin(&data); // re_rum if "" not closed
 		if (data.entry != 0 && ft_strncmp(data.entry, "exit\n", 5) == 0)
 			safe_exit(&data);
 		parse_a_cmd(&data);
-		while (code <= data.n_cmds)
+		printf("%d\n", data.n_cmds);
+		while (data.entry && code <= data.n_cmds)
+		{
+			printf("lopp inf\n");
 			exec_cmd(&data, &code);
+		}
 		init_data(&data);
 
 	}

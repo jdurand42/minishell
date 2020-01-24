@@ -6,13 +6,13 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 13:37:25 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/23 18:16:35 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/24 10:20:19 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int 	ft_check_nl(char *s)
+static int 	ft_check_nl(char *s)
 {
 	int i;
 
@@ -34,7 +34,7 @@ void 	parse_stdin(t_data *data)
 	char	buffer[1024];
 
  	data->entry = NULL;
-	while ((ret = read(0, buffer, 1024)) > 0)
+	while ((ret = read(0, buffer, 1023)) > 0)
 	{
 		printf("%d\n", ret);
 		buffer[ret] = 0;
@@ -47,7 +47,6 @@ void 	parse_stdin(t_data *data)
 	}
 	if (data->entry)
 		ft_lstadd_front(&data->gb_collector, ft_lstnew(data->entry));
-//	printf("%s\n", data->entry);
 }
 /*
 ** split?
@@ -55,10 +54,17 @@ void 	parse_stdin(t_data *data)
 **
 */
 
-void 	skip_spaces(char *cmds, int *i)
+void 	skip_spaces(char *s, int *i)
 {
-	while (cmds[*i] != 0 && cmds[*i] == 32)
-		*i += 1;
+	if (s != NULL)
+	{
+		printf("%s\n", &s[*i]);
+		while (s[*i] != 0 && s[*i] == 32)
+		{
+			printf("skip pete\n");
+			*i += 1;
+		}
+	}
 }
 
 void 	exec_cmd(t_data *data, int *id)
@@ -66,9 +72,12 @@ void 	exec_cmd(t_data *data, int *id)
 	int i;
 
 	i = 0;
+	printf("id: %d, %s\n", *id, data->cmds[*id]);
 	skip_spaces(data->cmds[*id], &i);
-	//if (ft_strncmp(data->cmds[*id], "echo ", 5) == 0)
-	ft_printf("%s\n", data->cmds[*id]);
+	if (data->cmds[*id] != NULL && ft_strncmp(&data->cmds[*id][i], "echo", 4) == 0 &&
+		!ft_isalpha(data->cmds[*id][i + 4]))
+		ft_echo(data, data->cmds[*id], i + 4);
+//	ft_printf("%s\n", data->cmds[*id]);
 	*id += 1;
 }
 
@@ -85,12 +94,10 @@ void 	parse_sep(t_data *data)
 		if (is_sep(data->entry[i]))
 		{
 			data->sep[j] = data->entry[i];
-			printf("%c\n", data->sep[j]);
 			j++;
 		}
 		i++;
 	}
-	printf("ici %d\n", j);
 	data->sep[j] = 0;
 }
 
@@ -111,6 +118,7 @@ void 	parse_a_cmd(t_data *data)
 	parse_sep(data);
 	j = 0;
 	data->cmds = ft_split_set(data->entry, "|;&\n");
+	data->args = safe_malloc(data->n_cmds, sizeof(char*), data);
 	ft_lstadd_front(&data->gb_collector, ft_lstnew(data->cmds));
 	while (data->cmds[j] != 0)
 	{
