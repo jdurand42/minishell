@@ -6,22 +6,143 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 08:44:37 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/24 11:02:07 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/24 13:29:09 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void 	ft_get_env(t_data *data, t_list **lst)
+{
+	char 	*s;
+	int		i;
+	int		j = 0;
+
+	b = *lst;
+
+	i = 0;
+
+	while (b != NULL)
+	{
+		while (b->content[i] != 0)
+		{
+			if (b->content[i] == '$' && b->content[i + 1] != '$')
+			{
+				while (ft_isalpha(b->content[i]))
+			}
+			i++;
+		}
+		b = b->next;
+	}
+}
+
+void 	exec_cmd(t_data *data, t_list *lst)
+{
+	if (!(lst != NULL))
+		return ;
+	ft_get_env(data, &lst);
+	if (ft_strncmp(lst->content, "echo", 4) == 0)
+		ft_echo(data, lst);
+	else if (ft_strncmp(lst->content, "pwd", 3) == 0)
+		ft_pwd(data, lst);
+	else if (ft_strncmp(lst->content, "cd", 2) == 0)
+		ft_cd(data, lst);
+	else if (ft_strncmp(lst->content, "env", 3) ==  0)
+		ft_env(data, lst);
+	else if (ft_strncmp(lst->content, "exit", 4) == 0)
+		ft_exit(data, lst);
+}
+
+void 	ft_env(t_data *data, t_list *lst)
+{
+	int i;
+
+	i = 0;
+	if (lst->next != NULL)
+		ft_printf("env: too many arguments\n");
+	else
+	{
+		while(data->envp[i] != NULL)
+		{
+			ft_printf("%s\n", data->envp[i]);
+			i++;
+		}
+	}
+}
+
+void 	ft_exit(t_data *data, t_list *lst)
+{
+	ft_printf("[process completed]\n");
+	safe_exit(data);
+}
+
 void 	ft_echo(t_data *data, t_list *lst)
 {
 	int		j;
+	int 	option;
 
 	j = 0;
-	printf("au moins on est ici\n");
+	option = 0;
 	lst = lst->next;
-	while (lst != 0)
+	if (ft_strncmp(lst->content, "-n", 2) == 0)
 	{
-		ft_printf("%s\n", lst->content);
+		option ^= 1;
 		lst = lst->next;
 	}
+	while (lst != 0)
+	{
+		ft_printf("%s", lst->content);
+		if (!option && lst->next != NULL)
+			ft_printf("\n");
+		lst = lst->next;
+	}
+	if (option)
+		ft_printf("%%");
+	ft_printf("\n");
+}
+
+void 	ft_cd(t_data *data, t_list *lst)
+{
+	int i;
+
+	i = 0;
+	if (lst->next == 0)
+	{
+		printf("changng dir to roots\nnot implemented yet\n");
+		while (data->envp[i] != NULL)
+		{
+			if (ft_strncmp(data->envp[i], "HOME=", 5) == 0)
+			{
+				chdir(&data->envp[i][5]);
+				break ;
+			}
+			i++;
+		}
+	}
+	else
+	{
+		lst = lst->next;
+		i = chdir(lst->content);
+		if (i != 0)
+			ft_printf("cd: no such file or directory: %s\n", lst->content);
+	}
+}
+
+void 	ft_pwd(t_data *data, t_list *lst)
+{
+	char *b;
+
+	b = NULL;
+	if (lst->next != NULL)
+	{
+		ft_printf("pwd: too many arguments");
+		return ;
+	}
+	if (!(b = getcwd(b, 0)))
+	{
+		ft_printf("Malloc error\n");
+		safe_exit(data);
+	}
+	ft_printf("%s\n", b);
+	free(b);
 }

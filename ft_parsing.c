@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 13:37:25 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/24 11:12:09 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/24 12:15:40 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,7 @@ void 	skip_spaces(char *s, int *i)
 	}
 }
 
-void 	exec_cmd(t_data *data, t_list *args)
-{
-	if (!(args != NULL))
-		return ;
-	if (ft_strncmp(args->content, "echo", 4) == 0)
-		ft_echo(data, args);
-}
+
 void 	parse_sep(t_data *data)
 {
 	int i;
@@ -122,5 +116,5 @@ void 	parse_a_cmd(t_data *data)
 	}
 	for (int i = 0; data->cmds[i] != 0; i++)
 		printf("%d: %s\n", 	i, data->cmds[i]);
-	printf("seps: %s\n", data->sep);
+	printf("seps: %s\n----\n", data->sep);
 }
