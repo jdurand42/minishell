@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:58:29 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/24 10:03:36 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/24 12:50:45 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void 	ft_test_gb(t_data *data)
 		tab[i] = safe_malloc(10, sizeof(int), data);
 }
 
-int main()
+int main(int ac, char **av, char **envp)
 {
 	t_data	data;
 	char	*cmd;
@@ -34,22 +34,21 @@ int main()
 
 	data.gb_collector = NULL;
 
-	init_data(&data);
+	init_data(&data, envp);
 	while (1)
 	{
 		code = 0;
 		ft_printf("%s", PROMPT);
 		parse_stdin(&data); // re_rum if "" not closed
-		if (data.entry != 0 && ft_strncmp(data.entry, "exit\n", 5) == 0)
-			safe_exit(&data);
 		parse_a_cmd(&data);
 		printf("%d\n", data.n_cmds);
-		while (data.entry && code <= data.n_cmds)
+		while (data.entry && code <= data.n_cmds && data.lst != NULL)
 		{
-			printf("lopp inf\n");
-			exec_cmd(&data, &code);
+			exec_cmd(&data, data.lst[code]);
+			code += 1;
 		}
-		init_data(&data);
+		ft_free_lst(&data, data.lst);
+		init_data(&data, envp);
 
 	}
 	//safe_exit(&data);
