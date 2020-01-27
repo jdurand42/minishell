@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:59:42 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/27 12:27:02 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/27 13:41:43 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,20 @@
 #include <unistd.h>
 #include "libft/libft.h"
 #define PROMPT "Minishell$: "
-/*
-typedef struct	s_cmd
-{
-	char 	*name;
-	char 	**args;
-	int 	n_args;
-}				t_cmd;
-*/
+
 typedef struct	s_data
 {
 	struct  s_list	*gb_collector;
-	struct	s_list	**lst;
- 	char			**cmds;
-	char 			**args;
-	char 			**envp;
-	char			*entry;
-	char			*sep;
-	int 			n_cmds;
+	struct	s_list	**lst; // tableau de liste avec tous les arguments
+ 	char			**cmds; //tabeau de str de commandes
+//	char 			**args; // plus rien
+	char 			**envp; // copie du pinteur sur le tableau d'env
+	char			*entry; // ce que on lit dans stdin
+	char			*sep; // separateur de commandes
+	int 			n_cmds; //nombre de cmds
 	int				i;
-	int				state;
-	int 			flux;
+	int				state; //rien
+	int 			flux; // pour gerer le flux de sortie
 }				t_data;
 
 void	*safe_malloc(size_t n, size_t n_size, t_data *data);

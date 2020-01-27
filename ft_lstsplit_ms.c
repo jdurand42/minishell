@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/27 12:20:11 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/27 13:24:40 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/27 13:32:02 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int    ft_cmp_set(char c, int  *flag)
 	}
 	return (0);
 }
-
+/*
 static int    count_words(char const *s, char *set)
 {
     unsigned int    i;
@@ -55,21 +55,21 @@ static int    count_words(char const *s, char *set)
         size++;
     return (size);
 }
-
+*/
 t_list        *ft_lstsplit_ms(char const *s, char *set)
 {
     unsigned int    i;
     unsigned int    st;
     t_list            *list;
-    unsigned int    size;
+//    unsigned int    size;
 	int           flag;
     i = 0;
     list = NULL;
     st = 0;
-    size = count_words(s, set);
+//    size = count_words(s, set);
 	flag = 0;
-
-	while (size--)
+	//printf("----%d----\n", size);
+	while (s[i] != 0)//size--)
 	{
     	while (s[i] != 0 && ft_cmp_set(s[i], &flag))
             i++;

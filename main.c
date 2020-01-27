@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:58:29 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/24 12:50:45 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/27 13:42:00 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int main(int ac, char **av, char **envp)
 	{
 		code = 0;
 		ft_printf("%s", PROMPT);
-		parse_stdin(&data); // re_rum if "" not closed
+		parse_stdin(&data);
 		parse_a_cmd(&data);
 		printf("%d\n", data.n_cmds);
 		while (data.entry && code <= data.n_cmds && data.lst != NULL)
