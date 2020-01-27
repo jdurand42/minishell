@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 13:37:25 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/24 12:15:40 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/27 12:26:18 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void 	parse_stdin(t_data *data)
 **
 **
 */
-
+/*
 void 	skip_spaces(char *s, int *i)
 {
 	if (s != NULL)
@@ -66,7 +66,7 @@ void 	skip_spaces(char *s, int *i)
 		}
 	}
 }
-
+*/
 
 void 	parse_sep(t_data *data)
 {
@@ -110,7 +110,7 @@ void 	parse_a_cmd(t_data *data)
 	ft_lstadd_front(&data->gb_collector, ft_lstnew(data->cmds));
 	while (data->cmds[j] != 0)
 	{
-		data->lst[j] = ft_splitlst(data->cmds[j], " ");
+		data->lst[j] = ft_lstsplit_ms(data->cmds[j], " ");
 		ft_lstadd_front(&data->gb_collector, ft_lstnew(data->cmds[j]));
 		j++;
 	}

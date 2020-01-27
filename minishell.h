@@ -6,7 +6,7 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 18:59:42 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/24 13:00:58 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/27 12:27:02 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 //#include <fctnl.h>
 #include <unistd.h>
 #include "libft/libft.h"
-#define PROMPT "Minishell$$$: "
+#define PROMPT "Minishell$: "
 /*
 typedef struct	s_cmd
 {
@@ -55,3 +55,4 @@ void 	ft_cd(t_data *data, t_list *lst);
 void 	ft_env(t_data *data, t_list *lst);
 void 	ft_exit(t_data *data, t_list *lst);
 void 	ft_free_lst(t_data *data, t_list **lst);
+t_list	*ft_lstsplit_ms(char const *s, char *set);

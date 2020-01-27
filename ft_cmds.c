@@ -6,41 +6,17 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 08:44:37 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/24 13:29:09 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/01/27 12:50:47 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void 	ft_get_env(t_data *data, t_list **lst)
-{
-	char 	*s;
-	int		i;
-	int		j = 0;
-
-	b = *lst;
-
-	i = 0;
-
-	while (b != NULL)
-	{
-		while (b->content[i] != 0)
-		{
-			if (b->content[i] == '$' && b->content[i + 1] != '$')
-			{
-				while (ft_isalpha(b->content[i]))
-			}
-			i++;
-		}
-		b = b->next;
-	}
-}
-
 void 	exec_cmd(t_data *data, t_list *lst)
 {
 	if (!(lst != NULL))
 		return ;
-	ft_get_env(data, &lst);
+	//ft_get_env(data, &lst);
 	if (ft_strncmp(lst->content, "echo", 4) == 0)
 		ft_echo(data, lst);
 	else if (ft_strncmp(lst->content, "pwd", 3) == 0)
@@ -92,8 +68,8 @@ void 	ft_echo(t_data *data, t_list *lst)
 	while (lst != 0)
 	{
 		ft_printf("%s", lst->content);
-		if (!option && lst->next != NULL)
-			ft_printf("\n");
+		if (lst->next != NULL)
+			ft_printf("/");
 		lst = lst->next;
 	}
 	if (option)
