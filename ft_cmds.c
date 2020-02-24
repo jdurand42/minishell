@@ -6,119 +6,99 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/24 08:44:37 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/27 12:50:47 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/02/19 15:33:38 by bothilie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void 	exec_cmd(t_data *data, t_list *lst)
+void	cmd_without_pipe(t_data *data, t_ms *lst, int i)
 {
-	if (!(lst != NULL))
-		return ;
-	//ft_get_env(data, &lst);
-	if (ft_strncmp(lst->content, "echo", 4) == 0)
-		ft_echo(data, lst);
-	else if (ft_strncmp(lst->content, "pwd", 3) == 0)
-		ft_pwd(data, lst);
-	else if (ft_strncmp(lst->content, "cd", 2) == 0)
-		ft_cd(data, lst);
-	else if (ft_strncmp(lst->content, "env", 3) ==  0)
-		ft_env(data, lst);
-	else if (ft_strncmp(lst->content, "exit", 4) == 0)
-		ft_exit(data, lst);
-}
-
-void 	ft_env(t_data *data, t_list *lst)
-{
-	int i;
-
-	i = 0;
-	if (lst->next != NULL)
-		ft_printf("env: too many arguments\n");
+	if (data->pipe[data->code] > 0)
+	{
+		data->pipe[data->cmd_pipe] -= 1;
+		data->code += 1;
+		exec_a_cmd(data, lst);
+		free_pipe_cmd(data);
+	}
 	else
 	{
-		while(data->envp[i] != NULL)
-		{
-			ft_printf("%s\n", data->envp[i]);
-			i++;
-		}
+		if (i == 1 && ft_cd(data, lst) == 1)
+			ft_ret_erreur(data, 1);
+		else if (i == 2)
+			ft_exit(data, lst);
+		else if (i == 3)
+			ft_unset(&data, lst);
+		else if (i == 4)
+			ft_export(data, lst);
 	}
+	return ;
 }
 
-void 	ft_exit(t_data *data, t_list *lst)
+void	test_pipe_export(t_data *data, t_ms *lst)
 {
-	ft_printf("[process completed]\n");
-	safe_exit(data);
+	if (!data->pipe[data->code])
+		cmd_without_pipe(data, lst, 4);
+	else
+		data->no_arg = 0;
 }
 
-void 	ft_echo(t_data *data, t_list *lst)
+void	exec_cmd(t_data *data, t_ms *lst)
 {
-	int		j;
-	int 	option;
-
-	j = 0;
-	option = 0;
-	lst = lst->next;
-	if (ft_strncmp(lst->content, "-n", 2) == 0)
+	data->no_arg = 1;
+	if (lst == NULL)
+		return ;
+	if (is_add_var(&lst))
 	{
-		option ^= 1;
-		lst = lst->next;
+		add_var(data, lst);
+		return ;
 	}
-	while (lst != 0)
+	else if (ft_strncmp(lst->content, "cd", 3) == 0 && !data->pipe[data->code])
+		cmd_without_pipe(data, lst, 1);
+	else if (ft_strncmp(lst->content, "exit", 5) == 0 &&
+		!data->pipe[data->code])
+		cmd_without_pipe(data, lst, 2);
+	else if (ft_strncmp(lst->content, "unset", 6) == 0 &&
+		!data->pipe[data->code])
+		cmd_without_pipe(data, lst, 3);
+	else if (ft_strncmp(lst->content, "export", 7) == 0 && (lst->next != NULL
+	&& ft_strncmp(ft_write_args(data, get_buffer(data, lst->next), 0), "", 1)))
+		test_pipe_export(data, lst);
+	else
 	{
-		ft_printf("%s", lst->content);
-		if (lst->next != NULL)
-			ft_printf("/");
-		lst = lst->next;
+		exec_a_cmd(data, lst);
+		free_pipe_cmd(data);
 	}
-	if (option)
-		ft_printf("%%");
-	ft_printf("\n");
 }
 
-void 	ft_cd(t_data *data, t_list *lst)
+int		str_is_digit(t_ms *lst)
 {
-	int i;
+	int		i;
+	char	*str;
 
 	i = 0;
-	if (lst->next == 0)
+	if (lst->next)
 	{
-		printf("changng dir to roots\nnot implemented yet\n");
-		while (data->envp[i] != NULL)
+		str = ft_strdup(lst->next->content);
+		while (str[i])
 		{
-			if (ft_strncmp(data->envp[i], "HOME=", 5) == 0)
+			if (!ft_isdigit(str[i]))
 			{
-				chdir(&data->envp[i][5]);
-				break ;
+				free(str);
+				return (0);
 			}
 			i++;
 		}
+		free(str);
 	}
 	else
-	{
-		lst = lst->next;
-		i = chdir(lst->content);
-		if (i != 0)
-			ft_printf("cd: no such file or directory: %s\n", lst->content);
-	}
+		return (0);
+	return (1);
 }
 
-void 	ft_pwd(t_data *data, t_list *lst)
+void	ft_echo(t_data *data)
 {
-	char *b;
-
-	b = NULL;
-	if (lst->next != NULL)
-	{
-		ft_printf("pwd: too many arguments");
-		return ;
-	}
-	if (!(b = getcwd(b, 0)))
-	{
-		ft_printf("Malloc error\n");
-		safe_exit(data);
-	}
-	ft_printf("%s\n", b);
-	free(b);
+	delete_space(data->buf);
+	write_redir(data);
+	exit(0);
 }

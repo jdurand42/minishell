@@ -5,52 +5,89 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/22 18:58:29 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/27 13:42:00 by jdurand          ###   ########.fr       */
+/*   Created: 2020/01/30 20:05:30 by jdurand           #+#    #+#             */
+/*   Updated: 2020/02/18 18:21:13 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void 	ft_test_gb(t_data *data)
+int		ft_is_empty(char *s)
 {
-	char *b = safe_malloc(12 + 1, sizeof(char), data);
-	b[0] = 'a';
-//	printf("%s\n", b);
-	char *c = safe_malloc(13 + 1, sizeof(char), data);
-	int *d = safe_malloc(15 + 1, sizeof(int), data);
-	int **tab;
+	int i;
 
-	tab = safe_malloc(8, sizeof(int*), data);
-	for (int i = 0; i < 8; i++)
-		tab[i] = safe_malloc(10, sizeof(int), data);
+	i = 0;
+	while (s[i] != 0)
+	{
+		if (s[i] != 32)
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
-int main(int ac, char **av, char **envp)
+int		ft_error_sep(t_data *data)
+{
+	ft_printf("Parse error near 'end of file'\n");
+	ft_ret_erreur(data, 258);
+	return (0);
+}
+
+int		ft_check_pipes(t_data *data)
+{
+	int i;
+
+	i = 0;
+	while (data->sep[i] != 0)
+	{
+		if (data->sep[i] == '|' && data->cmds[i + 1] == 0)
+			return (ft_error_sep(data));
+		else if (data->sep[i] == '|' && ft_is_empty(data->cmds[i + 1]))
+			return (ft_error_sep(data));
+		else if (data->sep[i] == ';' && data->sep[i + 1] == ';')
+		{
+			if (data->cmds[i + 1] == 0)
+				return (ft_error_sep(data));
+			else if (ft_is_empty(data->cmds[i + 1]))
+				return (ft_error_sep(data));
+		}
+		i++;
+	}
+	return (1);
+}
+
+void	ft_free_all(t_data *data)
+{
+	ft_free_lst(data->lst);
+	free_cmds(data->cmds);
+	ft_lstclear(&data->gb_collector2, free);
+}
+
+int		main(int argc, char **av, char **envp)
 {
 	t_data	data;
-	char	*cmd;
-	int 	code;
 
-	data.gb_collector = NULL;
-
-	init_data(&data, envp);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	init_data_start(&data, envp, argc, av);
 	while (1)
 	{
-		code = 0;
-		ft_printf("%s", PROMPT);
+		ft_printf("%s$: ", PROMPT);
 		parse_stdin(&data);
+		if (data.entry == NULL)
+			return (ft_printf("exiting...\n"));
 		parse_a_cmd(&data);
-		printf("%d\n", data.n_cmds);
-		while (data.entry && code <= data.n_cmds && data.lst != NULL)
+		while (data.entry && data.lst[data.code] != NULL && data.lst != NULL)
 		{
-			exec_cmd(&data, data.lst[code]);
-			code += 1;
+			if (!ft_check_pipes(&data))
+				break ;
+			exec_cmd(&data, data.lst[data.code]);
+			init_cmd(&data);
+			data.code += data.pipe[data.cmd_pipe] + 1;
+			data.cmd_pipe++;
 		}
-		ft_free_lst(&data, data.lst);
-		init_data(&data, envp);
-
+		ft_free_all(&data);
+		init_data(&data);
 	}
-	//safe_exit(&data);
 	return (0);
 }

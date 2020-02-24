@@ -6,40 +6,47 @@
 /*   By: jdurand <jdurand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/22 19:02:58 by jdurand           #+#    #+#             */
-/*   Updated: 2020/01/27 13:41:15 by jdurand          ###   ########.fr       */
+/*   Updated: 2020/02/18 16:46:30 by jdurand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	*safe_malloc(size_t n, size_t n_size, t_data *data)
+void		add_garbage(t_data *data, void **s)
 {
-	void *b;
-
-	if (!(b = malloc(n * n_size)))
-		safe_exit(data);
-	ft_bzero(b, n * n_size);
-	ft_lstadd_front(&data->gb_collector, ft_lstnew(b));
-//	printf("%p\n", data->gb_collector->content);
-	return b;
+	ft_lstadd_front(&data->gb_collector2, ft_lstnew(*s));
 }
 
-void 	safe_exit(t_data *data)
+void		*add_garbage_ret(t_data *data, void **s)
 {
-	void *b;
+	t_list *b;
 
-	if (!data->gb_collector)
-		return ;
-	t_list *b_next;
-//	ft_lstclear(&data->gb_collector, free);
+	if (!(b = malloc(sizeof(t_list))))
+		safe_exit(data);
+	if (*s)
+		b->content = *s;
+	else
+		b->content = NULL;
+	b->next = NULL;
+	if (*s)
+		ft_lstadd_front(&data->gb_collector2, b);
+	return (*s);
+}
 
-	while (data->gb_collector != NULL)
-	{
-		b_next = data->gb_collector->next;
-		free(data->gb_collector->content);
-		free(data->gb_collector);
-		data->gb_collector = b_next;
-	}
-	while(1);
+void		free_cmds(char **cmds)
+{
+	int i;
+
+	i = 0;
+	while (cmds[i] != 0)
+		free(cmds[i++]);
+	free(cmds);
+}
+
+void		safe_exit(t_data *data)
+{
+	if (data->cmds)
+		free_cmds(data->cmds);
+	ft_lstclear(&data->gb_collector2, free);
 	exit(0);
 }
